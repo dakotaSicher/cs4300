@@ -1,12 +1,18 @@
 from src.task4 import calculate_discount
 import pytest
 
-def test_calculate_discount():
-    assert calculate_discount(100, 10) == 90
-    assert calculate_discount(49.99, 25.8) == 37.09
-    assert calculate_discount(841.38, 50) == 420.69
-    assert calculate_discount("100.0", 10.5) == 89.5
+@pytest.mark.parametrize(
+    "price,discount,expected",
+    [
+        (100,10,90),
+        (49.99,25.8,37.09),
+        (841.38,50,420.69),
+    ]
+)
+def test_calculate_discount(price,discount,expected):
+    assert calculate_discount(price, discount) == expected
 
-    with pytest.raises(Exception) as e:
-        calculate_discount("Five hundred cigarettes", 25.5) 
-    assert e.type is ValueError
+
+def test_calc_disc_except():
+    with pytest.raises(TypeError):
+        calculate_discount("100", 25.5) 

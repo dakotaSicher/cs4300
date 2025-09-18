@@ -1,5 +1,12 @@
 from src.task6 import countWords
+import pytest
 
-def test_countWords():
-    assert countWords() == 104
-    assert countWords("../README.md") == 8
+@pytest.mark.parametrize(
+    "filepath,expected",
+    [
+        ("task6_read_me.txt",104),
+        ("../README.md",8),
+    ]
+)
+def test_countWords(filepath, expected):
+    assert countWords(filepath) == expected

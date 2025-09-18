@@ -1,7 +1,9 @@
-def calculate_discount(_price, _discount):
+def calculate_discount(price, discount):
+    #verify privided inputs are of numerical type
+    #also would 
+    ret_val = None
     try:
-        price = float(_price)
-        discount = float(_discount)
-    except ValueError:
+        ret_val = round(price * (1- discount/100), 2)
+    except TypeError:
         raise
-    return round(price * (1- discount/100),2)
+    return ret_val
