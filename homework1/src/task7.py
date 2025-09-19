@@ -15,13 +15,13 @@ class Crypter:
 
         self.salt = salt
         password = password.encode("utf-8")
-        kdf = PBKDF2HMAC(
+        self.kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
             salt=salt,
             iterations= self.ITERATIONS,
         )
-        self.key = base64.urlsafe_b64encode(kdf.derive(password))
+        self.key = base64.urlsafe_b64encode(self.kdf.derive(password))
         self.f = Fernet(self.key)
 
     def encryptText(self,text):
@@ -43,7 +43,6 @@ class Crypter:
         return encFile
 
                 
-
     def decryptText(self, text):
         return self.f.decrypt(text).decode("utf-8")
 
@@ -55,8 +54,10 @@ class Crypter:
         with open(enc_filepath,"rb") as Input:
             raw = Input.read()
 
-        salt = raw[:self.SALT_SIZE]
+        self.salt = raw[:self.SALT_SIZE]
         cipher = raw[self.SALT_SIZE:]
+        self.key = base64.urlsafe_b64encode(self.kdf.derive(password))
+        self.f = Fernet(self.key)
 
         plaintext = self.decryptText(cipher)
 
@@ -70,3 +71,20 @@ class Crypter:
             Output.write(plaintext)
 
         return dec_base
+
+
+if __name__=="__main__":
+    print("1: encrypt a file")
+    print("2: decrypt a file")
+    sel = input("select an operation: ")
+    pw = input("enter the password for encryption/decpryption: ", )
+    file = input("enter filename: ")
+    match int(sel):
+        case 1:
+            c = Crypter(pw)
+            new_file = c.encryptFile(file)
+            print(f"encrypted file: {new_file}")
+        case 2:
+            c = Crypter(pw)
+            new_file = c.decryptFile(file)
+            print(f"decrypted file: {new_file}")

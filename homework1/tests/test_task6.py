@@ -5,7 +5,7 @@ import pytest
     "filepath,expected",
     [
         ("task6_read_me.txt",104),
-        ("../README.md",8),
+        ("README.md",9),
     ]
 )
 def test_countWords(filepath, expected):

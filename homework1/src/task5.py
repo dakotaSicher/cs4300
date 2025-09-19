@@ -22,3 +22,14 @@ student_db = {
 
 def studentInfo(id):
     return student_db.get(id)
+
+if __name__=="__main__":
+    print("My Favorite books:")
+    print("Title : Author")
+    for b in favorite_books:
+        print(f"{b[0]} : {b[1]}")
+
+    print("############################")
+    print("Students in the db")    
+    for ID,s in student_db.items():
+        print(f"ID: {ID}, {s["firstName"]} {s["lastName"]}, Major: {s["Major"]}")    

@@ -7,3 +7,8 @@ def calculate_discount(price, discount):
     except TypeError:
         raise
     return ret_val
+
+if __name__ == "__main__":
+    price = input("enter a price: ")
+    discount = input("enter a discount percent: ")
+    print(f"discount price: ${calculate_discount(float(price),float(discount))}")

@@ -28,3 +28,14 @@ def sumN(n=100):
     for i in range(1,n+1):
         sum += i
     return sum
+
+if __name__ == "__main__":
+    num = input("enter a number: ")
+    print(sign(int(num)))
+
+    num = input("How many primes you want?: ")
+    print(primesList(int(num)))
+
+    num = input("enter number to sum: ")
+    print(sumN(int(num)))
+    
