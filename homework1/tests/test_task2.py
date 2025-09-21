@@ -1,78 +1,120 @@
-from src.task2 import dataType,add,sub, mult, div, mod
+import src.task2 as t2
 import pytest
 
-def test_dataType():
-    assert dataType(True) is bool
-    assert dataType("hello") is str
-    assert dataType(10) is int
-    assert dataType(1.5) is float
+@pytest.mark.parametrize(
+        "op1, op2, exp",
+        [
+            (1,2,3),
+            (1.0,2,3.0), 
+            (1,2.0,3.0),
+            (10**100,10**100, 2*10**100),
+            (351, 69, 420),
+            (1.1,2.2, 3.3000000000000003),
+        ]
+)
+def test_addNum(op1, op2,exp):
+    assert t2.addNum(op1,op2) == exp
 
-    assert dataType([] is None) is bool
-    assert dataType(10 + 1.0) is float
-
-def test_nums():
-    assert add(1,1) == 2
-    assert add(1.1,1) == 2.1
-    assert add(2.1,4.8) == 6.9
-
-    assert sub(2,1) == 1
-
-    #Floats have precision that sometimes give weird results
-    assert add(1.1, 2.2) != 3.3
-    assert sub(3.3, 1.1) != 2.2
-    
-
-    assert mult(2,2) == 4
-    assert mult(2.0, 2.0) == 4.0
-
-    assert div(10,2) == 5
-    assert div(10,2.5) == 4
-
-    assert mod(12,5) == 2
-    #again floats be funky
-    assert mod(2.2,1) != 0.2
-
-    #int can be cast to float
-    assert float(1) == 1.0
-    #but if you go float to int then you lose the decimal
-    assert int(1.1) == 1
+@pytest.mark.parametrize(
+        "op1, op2, exp",
+        [
+            (3,2,1),
+            (3.0,2,1.0),
+            (3,2.0,1.0),
+            (0, 10**100, -10**100),
+            (420, 69, 351),
+        ]
+)
+def test_subNum(op1, op2,exp):
+    assert t2.subNum(op1,op2) == exp
 
 
+@pytest.mark.parametrize(
+        "op1, op2, exp",
+        [
+            (3,2,6),
+            (3.0,2,6.0),
+            (3,2.0,6.0),
+            (0, 10**100, 0),
+        ]
+)
+def test_multNum(op1, op2,exp):
+    assert t2.multNum(op1,op2) == exp
 
-def test_strings():
-    #strings can be added (concatenated)
-    assert add("hello","world") == "helloworld"
-    
-    #doesn't covert to string
-    with pytest.raises(TypeError):
-        add("hello",15)
 
-    #even if its a number
-    with pytest.raises(TypeError):
-        add("100",15) == 115
+@pytest.mark.parametrize(
+        "op1, op2, exp",
+        [
+            (6,2,3.0),
+            (12,5,2.4),
+            (10**100, 2*10**100, 0.5),
+        ]
+)
+def test_div(op1, op2,exp):
+    assert t2.div(op1,op2) == exp
 
-    #strings of numbers can be cast tho if they match
-    assert add(int("100"),15) == 115
-    assert add(float("1.1"),2) == 3.1
-    #if they match what you try to cast them too
-    with pytest.raises(ValueError):
-        add(int("1.1"), 2)
+@pytest.mark.parametrize(
+        "op1, op2, exp",
+        [
+            (7,2,3),
+            (-7,2,-4),
+            (7,-2,-4),
+            (7.0,2,3.0),
+            (7,2.0,3.0),
+            (7.5,2.3,3.0),
+        ]
+)
+def test_floordiv(op1, op2,exp):
+    assert t2.floorDiv(op1,op2) == exp
 
-    #but '+' is all that works
-    with pytest.raises(TypeError):
-        sub("hello","ello")
-    with pytest.raises(TypeError):
-        mult("hello","world")
-    with pytest.raises(TypeError):
-        div("hello","world")
 
-def test_bool():
-    #what does adding bools do?
-    assert add(True, True) == 2
+@pytest.mark.parametrize(
+        "op1, op2, exp",
+        [
+            (7,2,1),
+            (7,-2,-1),
+            (-7,2,1),
+        ]
+)
+def test_mod(op1, op2,exp):
+    assert t2.modNum(op1,op2) == exp
 
-    #bools are basically just int 0 or 1
-    assert add(True, False) == True
-    assert add(True, False) == 1
-    assert add(1,False) == True
-    assert add(0,0) == False
 
+@pytest.mark.parametrize(
+        "op1, op2, exp",
+        [
+            ("hello","world","helloworld"),
+            ("123","456","123456"),
+            ("hello","","hello"),
+            ("hello","    ","hello    "),
+        ]
+)
+def test_cat(op1, op2,exp):
+    assert t2.catStr(op1,op2) == exp
+
+
+@pytest.mark.parametrize(
+        "op1, op2, exp",
+        [
+            ("hello",2,"hellohello"),
+            ("1-2-3-4-",4,"1-2-3-4-1-2-3-4-1-2-3-4-1-2-3-4-"),
+            ("a",4,"aaaa"),
+        ]
+)
+def test_rep(op1, op2,exp):
+    assert t2.repStr(op1,op2) == exp
+
+
+@pytest.mark.parametrize(
+        "op1, op2, op3, op4, exp",
+        [
+            ("hello world", 3, None, None, 'l'),
+            ("hello world", 0, None, None, 'h'),
+            ("hello world", None, 4, None, 'hell'),
+            ("hello world", None, None, 2, 'hlowrd'),
+            ("hello world", None, None, -1, 'dlrow olleh'),
+            ("hello world", 1, 5, 1, 'ello'),
+        ]
+)
+def test_slice(op1, op2, op3, op4, exp):
+    assert t2.sliceStr(op1,op2,op3,op4) == exp

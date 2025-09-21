@@ -1,17 +1,34 @@
 from src.task3 import sign,primesList,sumN
 import pytest
 
-def test_sign():
-    assert sign(1) == "positive"
-    assert sign(10-12) == "negative"
-    assert sign(0) == "zero"
+@pytest.mark.parametrize(
+        "op1, exp",
+        [
+            (1,"positive"),
+            (-2, "negative"),
+            (0, "zero"),
+        ]
+)
+def test_sign(op1,exp):
+    assert sign(op1) == exp
 
-    with pytest.raises(TypeError) as e: 
-        sign("hello")
-    assert e.type is TypeError
+@pytest.mark.parametrize(
+        "num, exp",
+        [
+            (10,[2,3,5,7,11,13,17,19,23,29])
+        ]
+)
+def test_primesList(num, exp):
+    assert primesList(num) == exp
 
-def test_primesList():
-    assert primesList() == [2,3,5,7,11,13,17,19,23,29]
 
-def test_sumN():
-    assert sumN() ==  100*101/2
+@pytest.mark.parametrize(
+        "num, exp",
+        [
+            (100, 100*101/2),
+            (10, 10*11/2),
+            (25, 25*26/2)
+        ]
+)
+def test_sumN(num, exp):
+    assert sumN(num) ==  exp

@@ -31,5 +31,5 @@ if __name__=="__main__":
 
     print("############################")
     print("Students in the db")    
-    for ID,s in student_db.items():
-        print(f"ID: {ID}, {s["firstName"]} {s["lastName"]}, Major: {s["Major"]}")    
+    for id,s in student_db.items():
+        print(f"ID: {id}, {s["firstName"]} {s["lastName"]}, Major: {s["Major"]}")    

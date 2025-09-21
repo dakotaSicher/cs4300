@@ -1,4 +1,4 @@
-from src.task7 import Crypter
+from src.task7 import Crypter, encryptFile,decryptFile
 import pytest
 
 @pytest.mark.parametrize(
@@ -24,9 +24,9 @@ def test_CrypterText(text):
 )
 
 def test_CrypterFile(filename):
-    c = Crypter("password")
-    encFile = c.encryptFile(filename)
-    decFile = c.decryptFile(encFile)
+    
+    encFile = encryptFile(filename, "password")
+    decFile = decryptFile(encFile, "password")
 
     with open(filename,"r") as org:
         orgText = org.read()
