@@ -2,9 +2,10 @@
 
 ### Setup
 1. Create a new virtual environemnt
-2. Activate the virtual environemnt
+```python -m venv venv_name```
+3. Activate the virtual environemnt
 ``` source (path to venv)/bin/activate ```
-3. Install the requirements
+4. Install the requirements
 ``` python -m pip install -r requirements.txt ```
 
 ### Run
