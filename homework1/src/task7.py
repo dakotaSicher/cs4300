@@ -17,7 +17,6 @@ class Crypter:
         if salt is None:
             salt = os.urandom(self.SALT_SIZE)
 
-        self.salt = salt
         password = password.encode("utf-8")
         self.kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
@@ -25,8 +24,8 @@ class Crypter:
             salt=salt,
             iterations= self.ITERATIONS,
         )
-        self.key = base64.urlsafe_b64encode(self.kdf.derive(password))
-        self.f = Fernet(self.key)
+        key = base64.urlsafe_b64encode(self.kdf.derive(password))
+        self.f = Fernet(key)
 
     def encryptText(self,text:str)-> bytes:
         return self.f.encrypt(text.encode("utf-8"))
@@ -35,10 +34,11 @@ class Crypter:
         return self.f.decrypt(text).decode("utf-8")
 
 
-def encryptFile(filepath,password:str)->str:
+def encryptFile(filepath, password:str)->str:
     """
     Reads a text file, encrypts it using a key derived from the password
     and write the encrypted bytes to a new file with the salt value used
+
     Returns: The filename of the encrypted file
     """
     if not os.path.isfile(filepath):
@@ -57,10 +57,11 @@ def encryptFile(filepath,password:str)->str:
     return encFile
 
 
-def decryptFile(enc_filepath,password:str)->str:
+def decryptFile(enc_filepath, password:str)->str:
     """
     Read an encrypted file, decrypts using a key derived from the password 
     and a salt value read from the file, and writes the text to a new file
+
     Returns: the file name of the plaintext file
     """
     if not os.path.isfile(enc_filepath):

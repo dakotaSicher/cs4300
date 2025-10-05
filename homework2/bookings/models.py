@@ -4,8 +4,8 @@ from django.db import models
 class Movie(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    release_data = models.DateTimeField("release data")
-    duration = models.DurationField("movie lenght")
+    release_date = models.DateTimeField("release date")
+    duration = models.DurationField("movie length")
 
 class Seat(models.Model):
     number = models.IntegerField("Seat Number")
