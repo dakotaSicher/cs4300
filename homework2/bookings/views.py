@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader, engines
 from .models import Movie, Seat, Booking
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, serializers
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .serializers import MovieSerializer,SeatSerializer,BookingSerializer
@@ -63,21 +63,10 @@ def book_seat(request, movie_id, seat_id):
     return HttpResponse(template.render(context, request))
 
 def booking_history(request, username="John Doe"):
-    # Use BookingViewSet to get the bookings
-    booking_viewset = BookingViewSet()
-    booking_viewset.request = request
-    # Add username as a query parameter
-    booking_viewset.request.query_params = {'user': username}
-    
-    # Get bookings through the viewset
-    bookings = booking_viewset.get_queryset()
-    
-    # Use the serializer to get readable data
-    serializer = BookingSerializer(bookings, many=True)
-    
+    bookings = Booking.objects.filter(user=username)
     template = loader.get_template('booking_history.html')
     context = {
-        'bookings': serializer.data,  # This will include movie_title and seat_number
+        'bookings': bookings,  # This will include movie_title and seat_number
     }
     return HttpResponse(template.render(context, request))
 
@@ -86,24 +75,11 @@ def booking_history(request, username="John Doe"):
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
-    http_method_names = ['get']
-    
-    def list(self,request):
-        serializer = self.get_serializer()
-        return Response(serializer.data)
-    
-    def retrieve(self, request, pk=None):
-        movie = get_object_or_404(self.queryset, pk=pk)
-        serializer = MovieSerializer(movie)
-        return Response(serializer.data)
-
 
 
 class SeatViewSet(viewsets.ModelViewSet):
-
     queryset = Seat.objects.all()
     serializer_class = SeatSerializer
-    http_method_names = ['get']
 
     def get_queryset(self):
         movie_id = self.request.query_params.get('movie_id',None)
@@ -117,34 +93,21 @@ class SeatViewSet(viewsets.ModelViewSet):
 
         return queryset
     
-
-    
 class BookingViewSet(viewsets.ModelViewSet):
-
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    http_method_names = ['get','post']
 
     def get_queryset(self):
-        queryset = Booking.objects.all()
-        # Filter bookings by user if username is provided
         username = self.request.query_params.get('user', None)
         if username is not None:
-            queryset = queryset.filter(user=username)
-        return queryset
+            return Booking.objects.filter(user=username)
+        return Booking.objects.all()
 
-    def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            seat = serializer.validated_data['seat_id']
-            movie = serializer.validated_data['movie_id']
-            booked = Booking.objects.filter(movie_id=movie).values_list('seat_id', flat=True)
-            if seat in booked:
-                return Response(
-                    {'error': 'This seat is already booked for this movie.'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            serializer.validated_data['seat_id'].status = False
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def perform_create(self, serializer):
+        seat = serializer.validated_data['seat']
+        movie = serializer.validated_data['movie']
+
+        if Booking.objects.filter(movie=movie, seat=seat).exists():
+            raise serializers.ValidationError('This seat is already booked for this movie.')
+        serializer.save()
+    

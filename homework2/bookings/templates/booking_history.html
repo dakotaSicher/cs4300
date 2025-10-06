@@ -5,8 +5,8 @@
     <ul class = " list - group " >
         {% for booking in bookings %}
         <li class = " list - group - item ">
-            <h5> Movie: {{ booking.movie_title}} </h5>
-            <p> Your Seat:  {{ booking.seat_number }} </p >
+            <h5> Movie: {{ booking.movie.title}} </h5>
+            <p> Your Seat:  {{ booking.seat.number }} </p >
             <p> Date Booked: {{ booking.book_date }} </p >
         </li >
         {% endfor %}
