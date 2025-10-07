@@ -1,18 +1,54 @@
-
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>{% block title %}Bookings{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      .card:hover {
+        transform: translateY(-4px);
+        transition: 0.3s ease;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      }
+      header {
+        background: linear-gradient(90deg, #007bff, #0056b3);
+        color: white;
+        text-align: center;
+        padding: 2rem 1rem;
+        margin-bottom: 2rem;
+      }
+      header h1 {
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+      .nav-buttons a {
+        margin: 0 0.5rem;
+        padding: 0.5rem 1.25rem;
+        border-radius: 30px;
+        font-weight: 500;
+        text-transform: uppercase;
+        transition: all 0.2s ease-in-out;
+      }
+      .nav-buttons a:hover {
+        transform: scale(1.05);
+      }
+    </style>
   </head>
-  <body>
-      <a href="{% url 'booking_history' %}" class="btn btn-primary">Booking History</a>
-      <a href="{% url 'movie_list' %}" class="btn btn-primary">Now Showing</a>
-    {% block content %}
-    {% endblock %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <body class="bg-light">
+    <header>
+      <h1>🎬 Bookings</h1>
+      <div class="nav-buttons">
+        <a href="{% url 'movie_list' %}" class="btn btn-outline-light">Now Showing</a>
+        <a href="{% url 'booking_history' %}" class="btn btn-outline-light">Booking History</a>
+      </div>
+    </header>
+
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
-

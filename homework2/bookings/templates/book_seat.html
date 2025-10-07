@@ -1,18 +1,32 @@
-
 {% extends 'base.html' %}
 {% block title %}Seat Selection{% endblock %}
 {% block content %}
-    <h2>{{movie.title}} Available Seats</h2>
-    <ul class="list-group">
-        {% for seat in seats %}
-        <li class="list-group-item">
-            {% if seat.status %}
-            <h3>Seat {{seat.number}}</h3>
-            <a href = "{% url 'book_seat' movie.id seat.id%}" class = "btn btn-primary">Book Now </a >
-            {% else %}
-            <h3>Seat {{seat.number}} - Booked</h3>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
+  <div class="text-center">
+    <h2 class="mb-4">{{ movie.title }} — Select Your Seat</h2>
+
+    <div class="container">
+      {% for seat in seats %}
+        {% if forloop.first or forloop.counter0|divisibleby:5 %}
+          <div class="row justify-content-center g-3 mb-2">
+        {% endif %}
+
+        <div class="col-2">
+          {% if seat.status %}
+            <a href="{% url 'book_seat' movie.id seat.id %}"
+               class="btn btn-primary w-100 py-3 fw-bold rounded-3">
+              {{ seat.number }}
+            </a>
+          {% else %}
+            <button class="btn btn-secondary w-100 py-3 fw-bold rounded-3" disabled>
+              {{ seat.number }}
+            </button>
+          {% endif %}
+        </div>
+
+        {% if forloop.counter|divisibleby:5 or forloop.last %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}

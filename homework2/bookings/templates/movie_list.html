@@ -1,15 +1,22 @@
 {% extends 'base.html' %}
-{% block title %} Movie List {% endblock %}
+{% block title %}Now Showing{% endblock %}
 {% block content %}
-    <h2> Available Movies </h2 >
-    <ul class = " list - group " >
-        {% for movie in movies %}
-        <li class = " list - group - item ">
-            <h5> {{ movie.title }} </h5>
-            <p> {{ movie.description }} </p >
-            <p> {{ movie.duration }} </p >
-            <a href = "{% url 'seat_list' movie.id %}" class = "btn btn-primary">Book Now </a >
-        </li >
-        {% endfor %}
-    </ul >
+  <h2 class="text-center mb-4">Now Showing</h2>
+
+  <div class="row justify-content-center g-4">
+    {% for movie in movies %}
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h5 class="card-title text-primary fw-bold">{{ movie.title }}</h5>
+            <p class="card-text text-muted">{{ movie.description }}</p>
+            <p class="card-text small"><strong>Duration:</strong> {{ movie.duration }}</p>
+            <a href="{% url 'seat_list' movie.id %}" class="btn btn-outline-primary w-100">Book Now</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-center">No movies available right now.</p>
+    {% endfor %}
+  </div>
 {% endblock %}
