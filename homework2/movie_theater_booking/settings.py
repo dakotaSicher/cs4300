@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-@yx#ujjrnenh_w50ssmak@ugc914)h)#+v8@ufu&#2+$uhcr0d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*.onrender.com']
 
 
 # Application definition
@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'movie_theater_booking.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
     # Replace this value with your local database's connection string.
-    default='postgresql://dakota:lDVjpFlC7PpUTszhsU2csyr8ZNuvqR5X@dpg-d3is5rje5dus739cbn30-a/bookings_5iww',
+    default='postgresql://postgres:postgres@localhost:5432/movie_theater_booking',
     conn_max_age=600
 ),
 }
