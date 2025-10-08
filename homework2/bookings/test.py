@@ -45,7 +45,7 @@ class APITests(TestCase):
         self.seat = Seat.objects.create(number=7)
 
     def test_list_movies(self):
-        response = self.client.get('/bookings/api/movies/')
+        response = self.client.get('/api/movies/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertGreaterEqual(len(response.data), 1)
 
@@ -60,7 +60,7 @@ class APITests(TestCase):
             'user': 'Test User',
             'book_date': datetime.now().isoformat()
         }
-        response = self.client.post('/bookings/api/bookings/', data, format='json')
+        response = self.client.post('/api/bookings/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Booking.objects.count(), 1)
 
@@ -79,5 +79,5 @@ class APITests(TestCase):
             'user': 'Another User',
             'book_date': datetime.now().isoformat()
         }
-        response = self.client.post('/bookings/api/bookings/', data, format='json')
+        response = self.client.post('/api/bookings/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
