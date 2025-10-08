@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@yx#ujjrnenh_w50ssmak@ugc914)h)#+v8@ufu&#2+$uhcr0d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['.onrender.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -79,11 +79,10 @@ WSGI_APPLICATION = 'movie_theater_booking.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-    # Replace this value with your local database's connection string.
-    default='postgresql://postgres:postgres@localhost:5432/movie_theater_booking',
-    conn_max_age=600
-),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 """ 'default': dj_database_url.config(
     # Replace this value with your local database's connection string.
